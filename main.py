@@ -8,7 +8,6 @@ def obtener_csv(name_file):
     
 
 edades = obtener_csv('edades_alumnos.csv')
-print(edades)
 
 # Obtenemos frecuencia absoluta simple
 def obtener_fi():
@@ -24,16 +23,26 @@ def obtener_fi():
 def analisis_estadistico(edades):
     fi = obtener_fi() # Almacenamos en la variable fi la funcion obtener_fi
     df = pd.DataFrame({'edad': range(18, 36)}) # Creamos el DataFrame con un rango de 18 a 35 para las edades
+    
+    if not isinstance(edades, list): 
+        return "La variable 'edades' no es válida"
+    
     # Agregamos fi al DataFrame
     df['fi'] = df['edad'].map(fi).fillna(0).astype(int) # Si la edad no está en el diccionario se rellena con 0 y lo convertimos a entero.
+    
     df['Fi'] = df['fi'].cumsum() # Calculamos frecuencia absoluta acumulada
+    
     n = df['fi'].sum() # Calculamos la suma de frecuencias absolutas
     df['ri'] = (df['fi'] / n).round(4) # Calculamos frecuencia relativa simple
+    
     df['Ri'] = (df['ri'].cumsum()).round(4) # Calculamos frecuencia relativa acumulada
+    
     df['pi%'] = (df['ri'] * 100).round(4) # Calculamos frecuencia porcentual simple
+    
     df['Pi%'] = (df['Ri'] * 100).round(4) # Calculamos frecuencia porcentual acumulada
 
     df.to_clipboard(index= False) # Guardamos en el portapapeles
-    return df
+    
+    return df # Retornamos el DataFrame
 
 print(analisis_estadistico(edades))
